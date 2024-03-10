@@ -1,0 +1,50 @@
+{% set name = "ft4222" %}
+{% set version = "1.10.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/ft4222-{{ version }}.tar.gz
+  sha256: 74eab32dfc5c012d11952c8645b72157f8828685972669ef3c22025491d96001
+
+build:
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - conda-verify
+
+  host:
+    - python
+    - setuptools >=40.9.0
+    - wheel
+    - cython
+    - pip
+
+  run:
+    - python
+    - libstdcxx-ng  # [linux-64]
+    - libgcc-ng  # [linux-64]
+    - sysroot_linux-64  # [linux-64]
+
+test:
+  imports:
+    - ft4222
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home: https://gitlab.com/msrelectronics/python-ft4222
+  summary: Python wrapper around libFT4222.
+  license: MIT
+  license_file: LICENSE.txt
+
+extra:
+  recipe-maintainers:
+    - kpajko79
